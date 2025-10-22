@@ -4,7 +4,19 @@ import { Vote } from "./Vote";
 import { db } from "@/db";
 import { POSTS_PER_PAGE } from "@/config";
 
-export async function PostList({ currentPage = 1 }) {
+
+export async function PostList({ currentPage = 1, sortBy = "top" }) {
+  const offset = POSTS_PER_PAGE * (currentPage - 1);
+
+    const SORT_OPTIONS = {
+    recent: "posts.created_at DESC",
+    controversial: "ABS(COALESCE(SUM(votes.vote), 0)) DESC",
+    top: "COALESCE(SUM(votes.vote), 0) DESC",
+  };
+
+  // I decided to pick safe order by from SORT_OPTIONS
+  const orderBy = SORT_OPTIONS[sortBy] || SORT_OPTIONS.top;
+
   const { rows: posts } =
     await db.query(`SELECT posts.id, posts.title, posts.body, posts.created_at, users.name, 
     COALESCE(SUM(votes.vote), 0) AS vote_total
@@ -12,9 +24,11 @@ export async function PostList({ currentPage = 1 }) {
      JOIN users ON posts.user_id = users.id
      LEFT JOIN votes ON votes.post_id = posts.id
      GROUP BY posts.id, users.name
-     ORDER BY vote_total DESC
-     LIMIT ${POSTS_PER_PAGE}
-     OFFSET ${POSTS_PER_PAGE * (currentPage - 1)}`);
+     ORDER BY ${orderBy}
+     LIMIT $1
+     OFFSET $2`,
+    [POSTS_PER_PAGE, offset]
+  );
 
   return (
     <>
