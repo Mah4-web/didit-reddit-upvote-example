@@ -7,6 +7,7 @@ import { useFormState } from "react-dom";
 import { CommentFormButton } from "./CommentFormButton";
 
 export function CommentForm({ postId, parentCommentId }) {
+  const { data: session } = useSession();
   const [state, dispatch] = useFormState(saveComment, {
     postId,
     parentCommentId,
@@ -20,6 +21,12 @@ export function CommentForm({ postId, parentCommentId }) {
     }
   }, [state.success]);
 
+    if (!session) {
+    return (
+      <p className="text-red-500">You need to be logged in to comment.</p>
+    );
+  }
+  
   return (
     <div className="ml-4">
       <button onClick={() => setOpen(!isOpen)} className="text-zinc-400">
