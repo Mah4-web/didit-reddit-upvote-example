@@ -14,7 +14,7 @@ The project is a work in progress and is not yet complete.
 - [x] Upvote and downvote posts ✅
 - [x] Pagination of posts ✅
 - [x] Comment on posts ✅
-- [x] Nested comments (recursive lists) ✅
+- [x] Nested comments (recursive lists) 
 - [x] User authentication ✅
 
 ## Setup instructions ✅
