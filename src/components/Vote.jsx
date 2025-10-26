@@ -39,7 +39,7 @@ async function handleVote(userId, postId, newVote) {
     );
   }
 
-  // revalidatePath("/");
+  // it revalidatePath("/");
   revalidatePath(`/post/${postId}`);
 }
 
