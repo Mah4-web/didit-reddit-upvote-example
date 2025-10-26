@@ -5,7 +5,13 @@ import { db } from "./db";
 
 export const { auth, handlers, signOut, signIn } = NextAuth({
   adapter: PostgresAdapter(db),
-  providers: [GitHub],
+  secret: process.env.AUTH_SECRET,
+  providers: [
+    GitHub({
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    }),
+  ],
   trustHost: true,
   callbacks: {
     session: async ({ session, user }) => {
