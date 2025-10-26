@@ -39,7 +39,7 @@ async function handleVote(userId, postId, newVote) {
     );
   }
 
-  // it revalidatePath("/");
+  // revalidatePath("/");
   revalidatePath(`/post/${postId}`);
 }
 
@@ -66,6 +66,7 @@ export async function Vote({ postId, votes }) {
           votes={votes}
           existingVote={existingVote}
         />
+        {/* try this as well */}
         {/* <button formAction={upvote}>
           {existingVote?.vote === 1 ? (
             <TbArrowBigUpFilled
